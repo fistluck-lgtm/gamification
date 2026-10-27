@@ -58,17 +58,25 @@
   /* 이미지 비율을 그대로 쓰되, 화면 높이가 낮으면 위아래를 조금 잘라 게임 카드가 빨리 보이게 */
   .hero img { width: 100%; height: auto; max-height: 58vh; object-fit: cover; object-position: center 40%; display: block; }
   .has-hero .hero { display: block; }
+  /* 학교 마크 + 학교 이름 (대표 이미지 위) */
   .school {
-    display: inline-block;
-    font-family: 'Jua', sans-serif; font-size: 15px; font-weight: 400;
-    color: var(--ink-soft);
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Jua', sans-serif; font-size: 19px; font-weight: 400;
+    color: var(--ink);
     background: #fff;
     border: 1px solid var(--line);
-    padding: 5px 14px; border-radius: 999px;
-    margin: 0 0 12px;
+    padding: 6px 18px 6px 8px; border-radius: 999px;
+    margin: 0 0 16px;
+    box-shadow: 0 4px 14px rgba(110,78,52,.10);
   }
-  .has-hero .school { margin: 18px 0 0; }
+  .school img { height: 40px; width: auto; max-width: 120px; object-fit: contain; display: block; }
+  .school.text-only { padding: 7px 18px; }
+  .school.logo-only { padding: 6px 10px; }
   .school:empty, .greeting:empty { display: none; }
+  @media (max-width: 480px) {
+    .school { font-size: 17px; gap: 8px; margin-bottom: 12px; }
+    .school img { height: 34px; }
+  }
   h1 {
     font-family: 'Jua', 'Gowun Dodum', sans-serif;
     font-weight: 400;
@@ -205,8 +213,8 @@
 <body>
 <div class="wrap">
   <header id="top">
-    <div class="hero" id="hero"><img id="heroImg" alt=""></div>
     <div class="school" id="school"></div>
+    <div class="hero" id="hero"><img id="heroImg" alt=""></div>
     <h1 id="siteTitle">교과 학습 게임</h1>
     <p class="greeting" id="greeting"></p>
   </header>
@@ -369,7 +377,21 @@
   var title = cfg.siteTitle || '교과 학습 게임';
   document.title = cfg.schoolName ? title + ' | ' + cfg.schoolName : title;
   document.getElementById('siteTitle').textContent = title;
-  document.getElementById('school').textContent = cfg.schoolName || '';
+  // 학교 마크와 학교 이름
+  var school = document.getElementById('school');
+  var logo = cfg.schoolLogo && String(cfg.schoolLogo).trim();
+  if (logo) {
+    var li = el('img');
+    li.src = logo;
+    li.alt = cfg.schoolName ? cfg.schoolName + ' 학교 마크' : '학교 마크';
+    li.onerror = function () { li.remove(); school.className = 'school text-only'; };
+    school.appendChild(li);
+    // 브라우저 탭 아이콘도 학교 마크로
+    var fav = document.querySelector('link[rel="icon"]');
+    if (fav) fav.href = logo;
+  }
+  if (cfg.schoolName) school.appendChild(el('span', null, cfg.schoolName));
+  school.className = 'school' + (logo && !cfg.schoolName ? ' logo-only' : (!logo && cfg.schoolName ? ' text-only' : ''));
   document.getElementById('greeting').textContent = cfg.greeting || '';
   document.getElementById('footerNote').textContent = cfg.footerNote || '';
 
