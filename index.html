@@ -48,16 +48,15 @@
   .hero {
     display: none;
     margin: 0 auto;
-    /* 화면 높이가 낮은 PC에서도 게임 카드가 첫 화면에 보이도록 */
-    max-width: min(1080px, calc(52vh * 1.79));
+    max-width: 100%;
     border-radius: 26px;
     overflow: hidden;
     box-shadow: var(--shadow);
     border: 4px solid #fff;
     background: var(--bg-2);
-    aspect-ratio: 2752 / 1536;
   }
-  .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* 이미지 비율을 그대로 쓰되, 화면 높이가 낮으면 위아래를 조금 잘라 게임 카드가 빨리 보이게 */
+  .hero img { width: 100%; height: auto; max-height: 58vh; object-fit: cover; object-position: center 40%; display: block; }
   .has-hero .hero { display: block; }
   .school {
     display: inline-block;
@@ -89,7 +88,9 @@
   @media (min-width: 1000px) {
     .games { grid-template-columns: repeat(3, 1fr); max-width: none; }
   }
+  .col { display: flex; flex-direction: column; gap: 12px; }
   .game {
+    flex: 1;
     display: flex; flex-direction: column;
     background: var(--card);
     border: 1px solid var(--line);
@@ -168,24 +169,26 @@
     padding: 9px 18px; border-radius: 999px; cursor: pointer;
   }
   .teacher-toggle:hover { color: var(--ink); border-color: rgba(58,44,37,.3); }
-  .teacher-panel {
+  .teacher-toggle[aria-expanded="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  /* 선생님 관리 버튼 — 각 게임 카드 바로 아래, 학생 입장 버튼과 같은 색 */
+  .teach {
     display: none;
-    width: 100%; max-width: 520px;
-    background: #fff; border: 1px solid var(--line);
-    border-radius: 16px; padding: 16px;
-    text-align: left; box-shadow: var(--shadow);
+    align-items: center; justify-content: center; gap: 8px;
+    min-height: 50px; padding: 0 16px;
+    border-radius: 14px;
+    background: var(--accent); color: #fff;
+    font-family: 'Jua', sans-serif; font-size: 17px;
+    text-decoration: none;
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--accent) 70%, black);
+    transition: transform .12s ease, filter .12s ease;
   }
-  .teacher-panel.open { display: block; }
-  .teacher-panel h2 { font-family: 'Jua', sans-serif; font-weight: 400; font-size: 17px; margin: 0 0 10px; color: var(--ink); }
-  .teacher-panel a {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 14px; margin-top: 8px;
-    border-radius: 10px; background: var(--bg);
-    color: var(--ink); text-decoration: none;
-  }
-  .teacher-panel a:hover { background: var(--bg-2); }
-  .teacher-panel .none { margin: 0; line-height: 1.6; }
-  .teacher-panel code { background: var(--bg-2); padding: 1px 6px; border-radius: 4px; }
+  .teach svg { width: 18px; height: 18px; flex-shrink: 0; }
+  a.teach:hover { filter: brightness(1.08); }
+  a.teach:active { transform: translateY(2px); box-shadow: 0 2px 0 color-mix(in srgb, var(--accent) 70%, black); }
+  a.teach:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .teach.none { background: var(--bg-2); color: var(--ink-soft); box-shadow: none; font-size: 15px; }
+  .teacher-on .teach { display: flex; }
 
   @media (max-width: 480px) {
     .hero { border-radius: 18px; border-width: 3px; }
@@ -195,6 +198,7 @@
   @media (prefers-reduced-motion: reduce) {
     .game, .banner img { transition: none; }
     a.game:hover, a.game:hover .banner img { transform: none; }
+    .teach { transition: none; }
   }
 </style>
 </head>
@@ -211,8 +215,7 @@
 
   <footer>
     <div id="footerNote"></div>
-    <button class="teacher-toggle" id="teacherToggle" aria-expanded="false" aria-controls="teacherPanel">선생님 메뉴</button>
-    <div class="teacher-panel" id="teacherPanel"></div>
+    <button class="teacher-toggle" id="teacherToggle" aria-expanded="false">선생님 메뉴</button>
   </footer>
 </div>
 
@@ -430,7 +433,12 @@
     }
     body.appendChild(enter);
     card.appendChild(body);
-    list.appendChild(card);
+
+    var col = el('div', 'col');
+    col.style.setProperty('--accent', card.style.getPropertyValue('--accent'));
+    col.appendChild(card);
+    col.appendChild(teacherButton(g));
+    list.appendChild(col);
   });
 
   function addArt(banner, id) {
@@ -438,27 +446,32 @@
     if (tpl) banner.insertBefore(tpl.content.cloneNode(true), banner.firstChild);
   }
 
-  // 선생님 메뉴
-  var toggle = document.getElementById('teacherToggle');
-  var panel = document.getElementById('teacherPanel');
-  panel.appendChild(el('h2', null, '교사용 관리 페이지'));
-  var links = games.filter(function (g) { return g.teacherUrl && String(g.teacherUrl).trim(); });
-  if (links.length) {
-    links.forEach(function (g) {
-      var a = el('a');
-      a.href = g.teacherUrl; a.target = '_blank'; a.rel = 'noopener';
-      a.appendChild(el('span', null, g.title));
-      a.appendChild(el('span', null, '↗'));
-      panel.appendChild(a);
-    });
-  } else {
-    var p = el('p', 'none');
-    p.innerHTML = '아직 등록된 관리 페이지가 없습니다. <code>config.js</code>의 <code>teacherUrl</code>에 각 게임의 교사용 서버 주소를 넣으면 여기에 나타납니다.';
-    panel.appendChild(p);
+  // 선생님 관리 버튼 (각 게임 카드 아래)
+  function teacherButton(g) {
+    var url = g.teacherUrl && String(g.teacherUrl).trim();
+    if (!url) return el('div', 'teach none', '관리 주소 미등록');
+    var a = el('a', 'teach');
+    a.href = url; a.target = '_blank'; a.rel = 'noopener';
+    a.setAttribute('aria-label', g.title + ' 교사용 관리 페이지 (새 탭)');
+    a.insertAdjacentHTML('beforeend',
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>');
+    a.appendChild(document.createTextNode('선생님 관리 페이지'));
+    return a;
   }
+
+  // 선생님 메뉴: 누르면 각 게임 아래에 관리 버튼이 나타납니다
+  var toggle = document.getElementById('teacherToggle');
   toggle.addEventListener('click', function () {
-    var open = panel.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    var on = document.body.classList.toggle('teacher-on');
+    toggle.setAttribute('aria-expanded', on ? 'true' : 'false');
+    toggle.textContent = on ? '선생님 메뉴 닫기' : '선생님 메뉴';
+    if (on) {
+      var first = document.querySelector('.teach');
+      if (first) {
+        var r = first.getBoundingClientRect();
+        if (r.top < 0 || r.bottom > window.innerHeight) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   });
 })();
 </script>
