@@ -57,7 +57,16 @@
   }
   /* 이미지 비율을 그대로 쓰되, 화면 높이가 낮으면 위아래를 조금 잘라 게임 카드가 빨리 보이게 */
   .hero img { width: 100%; height: auto; max-height: 58vh; object-fit: cover; object-position: center 40%; display: block; }
-  .has-hero .hero { display: block; }
+  .has-hero .hero { display: block; position: relative; }
+  /* 대표 이미지가 있으면 학교 마크·이름을 이미지 안쪽 아래 가운데에 */
+  .hero .school {
+    position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
+    margin: 0; white-space: nowrap;
+    background: rgba(255,255,255,.9);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    border-color: rgba(255,255,255,.7);
+    box-shadow: 0 6px 20px rgba(60,40,25,.22);
+  }
   /* 학교 마크 + 학교 이름 (대표 이미지 위) */
   .school {
     display: inline-flex; align-items: center; gap: 10px;
@@ -76,6 +85,10 @@
   @media (max-width: 480px) {
     .school { font-size: 17px; gap: 8px; margin-bottom: 12px; }
     .school img { height: 34px; }
+    .hero .school { bottom: 8px; font-size: 14px; gap: 6px; padding: 4px 12px 4px 5px; }
+    .hero .school.text-only { padding: 4px 12px; }
+    .hero .school.logo-only { padding: 4px 6px; }
+    .hero .school img { height: 26px; }
   }
   h1 {
     font-family: 'Jua', 'Gowun Dodum', sans-serif;
@@ -213,8 +226,8 @@
 <body>
 <div class="wrap">
   <header id="top">
-    <div class="school" id="school"></div>
     <div class="hero" id="hero"><img id="heroImg" alt=""></div>
+    <div class="school" id="school"></div>
     <h1 id="siteTitle">교과 학습 게임</h1>
     <p class="greeting" id="greeting"></p>
   </header>
@@ -401,9 +414,11 @@
     heroImg.alt = title;
     heroImg.onerror = function () {
       document.getElementById('top').classList.remove('has-hero');
+      document.getElementById('top').insertBefore(school, document.getElementById('siteTitle'));
       document.getElementById('siteTitle').classList.remove('sr-only');
     };
     heroImg.src = cfg.heroImage;
+    document.getElementById('hero').appendChild(school);
     document.getElementById('top').classList.add('has-hero');
     document.getElementById('siteTitle').classList.add('sr-only');
   }
