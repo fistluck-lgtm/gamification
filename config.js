@@ -17,7 +17,7 @@ window.PORTAL_CONFIG = {
   heroImage: './assets/hero.jpg',
 
   /* 2. 게임 목록 -----------------------------------------------
-     url         : https://script.google.com/macros/s/AKfycby2ITApzdfhlqSS8t4q9SDDJK1hPstbJsY5nMO59FInNc7uRRXajeIdMxJFSmmRQ0lg/exec
+     url         : 
                    - 이 저장소 안 폴더면 './olympos/' 처럼 적기
                    - 다른 곳(Apps Script 웹앱 등)이면 https:// 전체 주소
                    - 비워 두면 '준비 중'으로 표시
