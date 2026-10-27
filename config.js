@@ -35,7 +35,7 @@ window.PORTAL_CONFIG = {
       tagline: '신들의 세계를 누비며 퀘스트를 해결하는 3D 오픈월드 RPG',
       tags: ['3D 오픈월드', '퀘스트', '협동 레이드'],
       url: './olympos/',
-      teacherUrl: '',
+      teacherUrl: 'https://script.google.com/macros/s/AKfycbzDiI-vIyRSRDpDzG8RFhjiDGjAgTML7OjTCEcbw6cj03aceaY7mRNYxW-bmWXMD_hy/exec',
       image: './assets/olympos.jpg',
       newTab: false,
       visible: true
@@ -46,7 +46,7 @@ window.PORTAL_CONFIG = {
       tagline: '모둠 친구들과 함께 섬을 가꾸며 배우는 캐주얼 학습 게임',
       tags: ['모둠 협동', '섬 꾸미기', '학급 목표'],
       url: 'https://script.google.com/macros/s/AKfycby2ITApzdfhlqSS8t4q9SDDJK1hPstbJsY5nMO59FInNc7uRRXajeIdMxJFSmmRQ0lg/exec',
-      teacherUrl: '',
+      teacherUrl: 'https://script.google.com/macros/s/AKfycby2ITApzdfhlqSS8t4q9SDDJK1hPstbJsY5nMO59FInNc7uRRXajeIdMxJFSmmRQ0lg/exec',
       image: './assets/baeum.jpg',
       newTab: false,
       visible: true
@@ -57,7 +57,7 @@ window.PORTAL_CONFIG = {
       tagline: '퍼즐과 아케이드로 사고력·문제해결력을 키우는 두뇌 게임',
       tags: ['퍼즐', '아케이드', '사고력'],
       url: 'https://script.google.com/macros/s/AKfycbx0ffmWPLRgs4Bwh5Kp2Yy4aKNKHbHuYIt-TQ3IedBRbLA_YcOZw4bJ62vwfWtm_pyr/exec',
-      teacherUrl: '',
+      teacherUrl: 'https://script.google.com/macros/s/AKfycbx0ffmWPLRgs4Bwh5Kp2Yy4aKNKHbHuYIt-TQ3IedBRbLA_YcOZw4bJ62vwfWtm_pyr/exec',
       image: './assets/braincube.jpg',
       newTab: false,
       visible: true
