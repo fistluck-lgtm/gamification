@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fbf3e7">
+<title>교과 학습 게임</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./assets/icon-192.png">
+<link rel="apple-touch-icon" href="./assets/icon-192.png">
+<link rel="stylesheet" href="./fonts/fonts.css">
+<style>
+  :root {
+    --bg: #fbf3e7;
+    --bg-2: #f3e6d3;
+    --ink: #3a2c25;
+    --ink-soft: #7d6a5d;
+    --card: #ffffff;
+    --line: rgba(58,44,37,.12);
+    --focus: #e0663e;
+    --shadow: 0 10px 28px rgba(110,78,52,.14);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100dvh;
+    background:
+      radial-gradient(900px 420px at 50% -120px, #fff8ee 0%, transparent 70%),
+      var(--bg);
+    color: var(--ink);
+    font-family: 'Gowun Dodum', system-ui, -apple-system, 'Apple SD Gothic Neo', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: max(20px, env(safe-area-inset-top)) 16px 36px;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  /* ---------- 상단 ---------- */
+  header { text-align: center; margin: 0 0 30px; }
+  .hero {
+    display: none;
+    margin: 0 auto;
+    /* 화면 높이가 낮은 PC에서도 게임 카드가 첫 화면에 보이도록 */
+    max-width: min(1080px, calc(52vh * 1.79));
+    border-radius: 26px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 4px solid #fff;
+    background: var(--bg-2);
+    aspect-ratio: 2752 / 1536;
+  }
+  .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .has-hero .hero { display: block; }
+  .school {
+    display: inline-block;
+    font-family: 'Jua', sans-serif; font-size: 15px; font-weight: 400;
+    color: var(--ink-soft);
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 5px 14px; border-radius: 999px;
+    margin: 0 0 12px;
+  }
+  .has-hero .school { margin: 18px 0 0; }
+  .school:empty, .greeting:empty { display: none; }
+  h1 {
+    font-family: 'Jua', 'Gowun Dodum', sans-serif;
+    font-weight: 400;
+    font-size: clamp(34px, 6vw, 56px);
+    margin: 0; line-height: 1.1;
+  }
+  .greeting { color: var(--ink-soft); margin: 14px 0 0; font-size: clamp(16px, 2.2vw, 19px); }
+
+  /* ---------- 게임 카드 ---------- */
+  .games {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: 1fr;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  @media (min-width: 1000px) {
+    .games { grid-template-columns: repeat(3, 1fr); max-width: none; }
+  }
+  .game {
+    display: flex; flex-direction: column;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    overflow: hidden;
+    color: inherit; text-decoration: none;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    box-shadow: var(--shadow);
+  }
+  a.game:hover { transform: translateY(-4px); box-shadow: 0 18px 38px rgba(110,78,52,.22); border-color: var(--accent); }
+  a.game:hover .banner img { transform: scale(1.03); }
+  a.game:active { transform: translateY(-1px) scale(.99); }
+  a.game:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+  .banner {
+    aspect-ratio: 2912 / 1440;
+    position: relative;
+    overflow: hidden;
+    background: var(--accent);
+  }
+  .banner img, .banner svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform .35s ease;
+  }
+  .body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .title {
+    font-family: 'Jua', 'Gowun Dodum', sans-serif;
+    font-weight: 400;
+    font-size: 28px; line-height: 1.15; margin: 0;
+    color: var(--accent);
+  }
+  .tagline { margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.6; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span {
+    font-family: 'Jua', sans-serif; font-weight: 400;
+    font-size: 13px; letter-spacing: .02em;
+    padding: 4px 10px; border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 12%, white);
+    color: color-mix(in srgb, var(--accent) 85%, black);
+  }
+  .enter {
+    margin-top: auto;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 52px;
+    border-radius: 14px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Jua', sans-serif; font-weight: 400; font-size: 19px;
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--accent) 70%, black);
+  }
+  a.game:active .enter { transform: translateY(2px); box-shadow: 0 2px 0 color-mix(in srgb, var(--accent) 70%, black); }
+  .enter svg { width: 20px; height: 20px; }
+
+  /* 준비 중 */
+  .game.soon { cursor: default; }
+  .game.soon .banner > :not(.badge) { filter: grayscale(.8) brightness(.85); }
+  .game.soon .enter { background: var(--bg-2); color: var(--ink-soft); box-shadow: none; }
+  .badge {
+    position: absolute; top: 12px; left: 12px; z-index: 2;
+    background: rgba(40,28,22,.7); color: #fff;
+    font-family: 'Jua', sans-serif; font-size: 14px; font-weight: 400;
+    padding: 5px 12px; border-radius: 999px;
+  }
+
+  /* ---------- 하단 ---------- */
+  footer {
+    margin-top: 34px;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    color: var(--ink-soft); font-size: 14px; text-align: center;
+  }
+  .teacher-toggle {
+    font: inherit; color: var(--ink-soft);
+    background: #fff; border: 1px solid var(--line);
+    padding: 9px 18px; border-radius: 999px; cursor: pointer;
+  }
+  .teacher-toggle:hover { color: var(--ink); border-color: rgba(58,44,37,.3); }
+  .teacher-panel {
+    display: none;
+    width: 100%; max-width: 520px;
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 16px; padding: 16px;
+    text-align: left; box-shadow: var(--shadow);
+  }
+  .teacher-panel.open { display: block; }
+  .teacher-panel h2 { font-family: 'Jua', sans-serif; font-weight: 400; font-size: 17px; margin: 0 0 10px; color: var(--ink); }
+  .teacher-panel a {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 14px; margin-top: 8px;
+    border-radius: 10px; background: var(--bg);
+    color: var(--ink); text-decoration: none;
+  }
+  .teacher-panel a:hover { background: var(--bg-2); }
+  .teacher-panel .none { margin: 0; line-height: 1.6; }
+  .teacher-panel code { background: var(--bg-2); padding: 1px 6px; border-radius: 4px; }
+
+  @media (max-width: 480px) {
+    .hero { border-radius: 18px; border-width: 3px; }
+    .title { font-size: 24px; }
+    .body { padding: 14px 16px 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .game, .banner img { transition: none; }
+    a.game:hover, a.game:hover .banner img { transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="top">
+    <div class="hero" id="hero"><img id="heroImg" alt=""></div>
+    <div class="school" id="school"></div>
+    <h1 id="siteTitle">교과 학습 게임</h1>
+    <p class="greeting" id="greeting"></p>
+  </header>
+
+  <main class="games" id="games" aria-label="게임 목록"></main>
+
+  <footer>
+    <div id="footerNote"></div>
+    <button class="teacher-toggle" id="teacherToggle" aria-expanded="false" aria-controls="teacherPanel">선생님 메뉴</button>
+    <div class="teacher-panel" id="teacherPanel"></div>
+  </footer>
+</div>
+
+<!-- 기본 배너 일러스트 (config.js에서 image를 지정하면 그 이미지로 바뀝니다) -->
+<template id="art-olympos">
+  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="o-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2b1f63"/><stop offset=".55" stop-color="#8a4fb3"/><stop offset="1" stop-color="#f2b56b"/>
+      </linearGradient>
+      <linearGradient id="o-stone" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff4dc"/><stop offset="1" stop-color="#d9c29a"/>
+      </linearGradient>
+    </defs>
+    <rect width="320" height="200" fill="url(#o-sky)"/>
+    <circle cx="250" cy="52" r="26" fill="#ffe7a8" opacity=".9"/>
+    <g fill="#fff" opacity=".7"><circle cx="40" cy="30" r="1.4"/><circle cx="90" cy="18" r="1"/><circle cx="150" cy="40" r="1.2"/><circle cx="205" cy="22" r="1"/><circle cx="290" cy="95" r="1"/></g>
+    <path d="M0 160 Q60 130 120 150 T240 140 T320 150 V200 H0Z" fill="#3b2a6e" opacity=".8"/>
+    <path d="M0 175 Q80 150 160 168 T320 165 V200 H0Z" fill="#2a1d55"/>
+    <g fill="url(#o-stone)">
+      <path d="M95 92 L160 62 L225 92 Z"/>
+      <rect x="92" y="92" width="136" height="8" rx="1"/>
+      <rect x="103" y="102" width="10" height="50"/><rect x="125" y="102" width="10" height="50"/>
+      <rect x="185" y="102" width="10" height="50"/><rect x="207" y="102" width="10" height="50"/>
+      <rect x="86" y="152" width="148" height="7" rx="1"/>
+      <rect x="78" y="159" width="164" height="7" rx="1"/>
+    </g>
+    <!-- 서고: 신전 안의 책장 -->
+    <rect x="140" y="104" width="40" height="48" fill="#4a2f2a"/>
+    <g>
+      <rect x="143" y="108" width="5" height="18" fill="#e06b5a"/><rect x="149" y="110" width="4" height="16" fill="#f2c45a"/>
+      <rect x="154" y="107" width="6" height="19" fill="#5aa0e0"/><rect x="161" y="109" width="4" height="17" fill="#7cc48a"/>
+      <rect x="166" y="108" width="5" height="18" fill="#c58ae0"/><rect x="172" y="110" width="5" height="16" fill="#f2c45a"/>
+      <rect x="143" y="129" width="34" height="2" fill="#2e1c19"/>
+      <rect x="144" y="133" width="6" height="17" fill="#5aa0e0"/><rect x="151" y="135" width="4" height="15" fill="#e06b5a"/>
+      <rect x="156" y="132" width="5" height="18" fill="#7cc48a"/><rect x="162" y="134" width="6" height="16" fill="#f2c45a"/>
+      <rect x="169" y="133" width="7" height="17" fill="#c58ae0"/>
+    </g>
+    <path d="M158 70 l6 0 -4 7 5 0 -9 12 3 -9 -5 0z" fill="#ffd66b"/>
+  </svg>
+</template>
+
+<template id="art-baeum">
+  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="b-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#8fd8ff"/><stop offset="1" stop-color="#d9f4ff"/>
+      </linearGradient>
+      <linearGradient id="b-sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3cc1d6"/><stop offset="1" stop-color="#1e8fb8"/>
+      </linearGradient>
+    </defs>
+    <rect width="320" height="200" fill="url(#b-sky)"/>
+    <circle cx="262" cy="44" r="20" fill="#fff3a6"/>
+    <g fill="#fff"><ellipse cx="70" cy="40" rx="26" ry="9"/><ellipse cx="88" cy="34" rx="16" ry="9"/><ellipse cx="190" cy="28" rx="20" ry="7"/></g>
+    <rect y="120" width="320" height="80" fill="url(#b-sea)"/>
+    <g stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" opacity=".55">
+      <path d="M20 150 q8 -5 16 0"/><path d="M270 165 q8 -5 16 0"/><path d="M60 180 q8 -5 16 0"/><path d="M250 140 q8 -5 16 0"/>
+    </g>
+    <ellipse cx="160" cy="138" rx="112" ry="22" fill="#f6e2a8"/>
+    <path d="M70 136 Q100 92 160 96 Q222 92 250 136 Z" fill="#6fcf6a"/>
+    <path d="M95 130 Q125 104 165 108 Q205 106 228 130 Z" fill="#59b85a"/>
+    <!-- 집 -->
+    <rect x="176" y="100" width="34" height="26" rx="3" fill="#fff8ee"/>
+    <path d="M171 102 L193 84 L215 102 Z" fill="#ff8a6b"/>
+    <rect x="189" y="110" width="9" height="16" rx="2" fill="#9a6a4a"/>
+    <!-- 야자수 -->
+    <path d="M118 128 q-4 -26 6 -46" stroke="#9a6a4a" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <g fill="#3fa84a">
+      <path d="M124 82 q-22 -6 -32 8 q16 -4 32 -8z"/><path d="M124 82 q22 -8 32 6 q-16 -2 -32 -6z"/>
+      <path d="M124 82 q-8 -18 -26 -18 q12 8 26 18z"/><path d="M124 82 q6 -20 24 -20 q-12 8 -24 20z"/>
+    </g>
+    <circle cx="121" cy="86" r="3" fill="#8a5a2a"/><circle cx="127" cy="87" r="3" fill="#8a5a2a"/>
+    <!-- 꽃 -->
+    <g><circle cx="148" cy="122" r="3" fill="#ff7aa8"/><circle cx="232" cy="124" r="3" fill="#ffd34d"/><circle cx="100" cy="126" r="3" fill="#ffd34d"/></g>
+  </svg>
+</template>
+
+<template id="art-braincube">
+  <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="c-bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#0d2f3f"/><stop offset="1" stop-color="#14536a"/>
+      </linearGradient>
+      <pattern id="c-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M20 0 H0 V20" fill="none" stroke="#7ff0ff" stroke-opacity=".10"/>
+      </pattern>
+    </defs>
+    <rect width="320" height="200" fill="url(#c-bg)"/>
+    <rect width="320" height="200" fill="url(#c-grid)"/>
+    <!-- 아이소메트릭 큐브 3x3 -->
+    <g transform="translate(160 104)">
+      <!-- 윗면 -->
+      <g>
+        <path d="M0 -66 L57 -33 L0 0 L-57 -33Z" fill="#ffd34d"/>
+        <g stroke="#0d2f3f" stroke-width="2.5" fill="none" stroke-linejoin="round">
+          <path d="M0 -66 L57 -33 L0 0 L-57 -33Z"/>
+          <path d="M-19 -55 L38 -22"/><path d="M-38 -44 L19 -11"/>
+          <path d="M19 -55 L-38 -22"/><path d="M38 -44 L-19 -11"/>
+        </g>
+        <path d="M0 -44 L19 -33 L0 -22 L-19 -33Z" fill="#ff7a59"/>
+      </g>
+      <!-- 왼쪽 면 -->
+      <g>
+        <path d="M-57 -33 L0 0 L0 66 L-57 33Z" fill="#3ec9a7"/>
+        <path d="M-38 0 L-19 11 L-19 33 L-38 22Z" fill="#5aa0ff"/>
+        <g stroke="#0d2f3f" stroke-width="2.5" fill="none" stroke-linejoin="round">
+          <path d="M-57 -33 L0 0 L0 66 L-57 33Z"/>
+          <path d="M-38 -22 L-38 44"/><path d="M-19 -11 L-19 55"/>
+          <path d="M-57 -11 L0 22"/><path d="M-57 11 L0 44"/>
+        </g>
+      </g>
+      <!-- 오른쪽 면 -->
+      <g>
+        <path d="M57 -33 L0 0 L0 66 L57 33Z" fill="#c07aff"/>
+        <path d="M19 33 L38 22 L38 44 L19 55Z" fill="#ffd34d"/>
+        <g stroke="#0d2f3f" stroke-width="2.5" fill="none" stroke-linejoin="round">
+          <path d="M57 -33 L0 0 L0 66 L57 33Z"/>
+          <path d="M38 -22 L38 44"/><path d="M19 -11 L19 55"/>
+          <path d="M57 -11 L0 22"/><path d="M57 11 L0 44"/>
+        </g>
+      </g>
+    </g>
+    <g fill="#7ff0ff">
+      <path d="M62 52 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" opacity=".9"/>
+      <path d="M262 140 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" opacity=".8"/>
+      <path d="M256 46 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" opacity=".6"/>
+    </g>
+    <g fill="#ffd34d" opacity=".85" font-family="sans-serif" font-weight="700">
+      <text x="44" y="150" font-size="22">?</text><text x="270" y="86" font-size="18">+</text>
+    </g>
+  </svg>
+</template>
+
+<script src="./config.js"></script>
+<script>
+(function () {
+  var cfg = window.PORTAL_CONFIG || {};
+  var ACCENTS = { olympos: '#4a3d8f', baeum: '#3f8a3a', braincube: '#1f74c9' };
+  var FALLBACK = ['#e0663e', '#4f7be0', '#c9a12a', '#d14f8a'];
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function isExternal(url) { return /^https?:\/\//i.test(url); }
+
+  // 상단
+  var title = cfg.siteTitle || '교과 학습 게임';
+  document.title = cfg.schoolName ? title + ' | ' + cfg.schoolName : title;
+  document.getElementById('siteTitle').textContent = title;
+  document.getElementById('school').textContent = cfg.schoolName || '';
+  document.getElementById('greeting').textContent = cfg.greeting || '';
+  document.getElementById('footerNote').textContent = cfg.footerNote || '';
+
+  // 대표 이미지: 지정하면 큰 제목 대신 이미지를 보여 줍니다
+  if (cfg.heroImage) {
+    var heroImg = document.getElementById('heroImg');
+    heroImg.alt = title;
+    heroImg.onerror = function () {
+      document.getElementById('top').classList.remove('has-hero');
+      document.getElementById('siteTitle').classList.remove('sr-only');
+    };
+    heroImg.src = cfg.heroImage;
+    document.getElementById('top').classList.add('has-hero');
+    document.getElementById('siteTitle').classList.add('sr-only');
+  }
+
+  // 게임 카드
+  var list = document.getElementById('games');
+  var games = (cfg.games || []).filter(function (g) { return g && g.visible !== false; });
+
+  games.forEach(function (g, i) {
+    var ready = !!(g.url && String(g.url).trim());
+    var card = el(ready ? 'a' : 'div', 'game' + (ready ? '' : ' soon'));
+    card.style.setProperty('--accent', g.accent || ACCENTS[g.id] || FALLBACK[i % FALLBACK.length]);
+
+    if (ready) {
+      card.href = g.url;
+      if (g.newTab) { card.target = '_blank'; card.rel = 'noopener'; }
+      card.setAttribute('aria-label', g.title + ' 입장하기');
+    } else {
+      card.setAttribute('aria-disabled', 'true');
+    }
+
+    var banner = el('div', 'banner');
+    if (g.image) {
+      var img = el('img');
+      img.src = g.image; img.alt = g.title + ' 대표 이미지';
+      img.onerror = function () { img.remove(); addArt(banner, g.id); };
+      banner.appendChild(img);
+    } else {
+      addArt(banner, g.id);
+    }
+    if (!ready) banner.appendChild(el('span', 'badge', '준비 중'));
+    card.appendChild(banner);
+
+    var body = el('div', 'body');
+    body.appendChild(el('h2', 'title', g.title || '이름 없는 게임'));
+    if (g.tagline) body.appendChild(el('p', 'tagline', g.tagline));
+    if (g.tags && g.tags.length) {
+      var tags = el('div', 'tags');
+      g.tags.forEach(function (t) { tags.appendChild(el('span', null, t)); });
+      body.appendChild(tags);
+    }
+    var enter = el('div', 'enter');
+    if (ready) {
+      enter.appendChild(document.createTextNode('입장하기'));
+      enter.insertAdjacentHTML('beforeend',
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>');
+    } else {
+      enter.textContent = '곧 열려요';
+    }
+    body.appendChild(enter);
+    card.appendChild(body);
+    list.appendChild(card);
+  });
+
+  function addArt(banner, id) {
+    var tpl = document.getElementById('art-' + id);
+    if (tpl) banner.insertBefore(tpl.content.cloneNode(true), banner.firstChild);
+  }
+
+  // 선생님 메뉴
+  var toggle = document.getElementById('teacherToggle');
+  var panel = document.getElementById('teacherPanel');
+  panel.appendChild(el('h2', null, '교사용 관리 페이지'));
+  var links = games.filter(function (g) { return g.teacherUrl && String(g.teacherUrl).trim(); });
+  if (links.length) {
+    links.forEach(function (g) {
+      var a = el('a');
+      a.href = g.teacherUrl; a.target = '_blank'; a.rel = 'noopener';
+      a.appendChild(el('span', null, g.title));
+      a.appendChild(el('span', null, '↗'));
+      panel.appendChild(a);
+    });
+  } else {
+    var p = el('p', 'none');
+    p.innerHTML = '아직 등록된 관리 페이지가 없습니다. <code>config.js</code>의 <code>teacherUrl</code>에 각 게임의 교사용 서버 주소를 넣으면 여기에 나타납니다.';
+    panel.appendChild(p);
+  }
+  toggle.addEventListener('click', function () {
+    var open = panel.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+})();
+</script>
+</body>
+</html>
