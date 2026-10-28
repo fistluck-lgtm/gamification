@@ -47,7 +47,7 @@ window.PORTAL_CONFIG = {
       tagline: '모둠 친구들과 함께 섬을 가꾸며 배우는 캐주얼 학습 게임',
       tags: ['모둠 협동', '섬 꾸미기', '학급 목표'],
       url: 'https://script.google.com/macros/s/AKfycby2ITApzdfhlqSS8t4q9SDDJK1hPstbJsY5nMO59FInNc7uRRXajeIdMxJFSmmRQ0lg/exec',
-      teacherUrl: 'https://script.google.com/macros/s/AKfycby2ITApzdfhlqSS8t4q9SDDJK1hPstbJsY5nMO59FInNc7uRRXajeIdMxJFSmmRQ0lg/exec',
+      teacherUrl: 'https://script.google.com/macros/s/AKfycby2ITApzdfhlqSS8t4q9SDDJK1hPstbJsY5nMO59FInNc7uRRXajeIdMxJFSmmRQ0lg/exec?page=teacher',
       image: './assets/baeum.jpg',
       newTab: false,
       visible: true
@@ -58,7 +58,7 @@ window.PORTAL_CONFIG = {
       tagline: '퍼즐과 아케이드로 사고력·문제해결력을 키우는 두뇌 게임',
       tags: ['퍼즐', '아케이드', '사고력'],
       url: 'https://script.google.com/macros/s/AKfycbx0ffmWPLRgs4Bwh5Kp2Yy4aKNKHbHuYIt-TQ3IedBRbLA_YcOZw4bJ62vwfWtm_pyr/exec',
-      teacherUrl: 'https://script.google.com/macros/s/AKfycbx0ffmWPLRgs4Bwh5Kp2Yy4aKNKHbHuYIt-TQ3IedBRbLA_YcOZw4bJ62vwfWtm_pyr/exec',
+      teacherUrl: 'https://script.google.com/macros/s/AKfycbx0ffmWPLRgs4Bwh5Kp2Yy4aKNKHbHuYIt-TQ3IedBRbLA_YcOZw4bJ62vwfWtm_pyr/exec?page=teacher',
       image: './assets/braincube.jpg',
       newTab: false,
       visible: true
