@@ -35,7 +35,7 @@ window.PORTAL_CONFIG = {
       title: '올림포스의 서고',
       tagline: '신들의 세계를 누비며 퀘스트를 해결하는 3D 오픈월드 RPG',
       tags: ['3D 오픈월드', '퀘스트', '협동 레이드'],
-      url: './olympos/',
+      url: 'https://script.google.com/macros/s/AKfycbzDiI-vIyRSRDpDzG8RFhjiDGjAgTML7OjTCEcbw6cj03aceaY7mRNYxW-bmWXMD_hy/exec',
       teacherUrl: 'https://script.google.com/macros/s/AKfycbzDiI-vIyRSRDpDzG8RFhjiDGjAgTML7OjTCEcbw6cj03aceaY7mRNYxW-bmWXMD_hy/exec',
       image: './assets/olympos.jpg',
       newTab: false,
