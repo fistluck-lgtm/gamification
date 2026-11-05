@@ -68,8 +68,8 @@ window.PORTAL_CONFIG = {
       title: '몬스터북',
       tagline: '몬스터 도감을 하나씩 채워 가며 배우는 캐주얼 판타지 RPG',
       tags: ['도감 수집', '캐주얼 RPG', '협동 모험'],
-      url: './monsterbook/',
-      teacherUrl: '',
+      url: 'https://script.google.com/macros/s/AKfycby8Bvddk1H6efS3kY1DAmfG1t6sP2yWpuFJ3-0hn2C4dNtCwcHFLmj0-i-kZ5KkHJT4Jw/exec',
+      teacherUrl: 'https://script.google.com/macros/s/AKfycby8Bvddk1H6efS3kY1DAmfG1t6sP2yWpuFJ3-0hn2C4dNtCwcHFLmj0-i-kZ5KkHJT4Jw/exec?page=teacher',
       image: './assets/monsterbook.jpg',
       newTab: false,
       visible: true
