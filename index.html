@@ -109,6 +109,15 @@
   @media (min-width: 1000px) {
     .games { grid-template-columns: repeat(3, 1fr); max-width: none; }
   }
+  /* 게임이 4개일 때: 태블릿·작은 PC는 2×2, 넓은 PC는 한 줄에 4개 */
+  @media (min-width: 700px) {
+    .games[data-count="4"] { grid-template-columns: repeat(2, 1fr); max-width: none; }
+  }
+  @media (min-width: 1280px) {
+    .games[data-count="4"] { grid-template-columns: repeat(4, 1fr); }
+    .games[data-count="4"] .title { font-size: 25px; }
+    .games[data-count="4"] .tagline { font-size: 15px; }
+  }
   .col { display: flex; flex-direction: column; gap: 12px; }
   .game {
     flex: 1;
@@ -138,6 +147,7 @@
     object-fit: cover; display: block;
     transition: transform .35s ease;
   }
+  .game[data-id="monsterbook"] .banner img { object-position: center 20%; }
   .body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
   .title {
     font-family: 'Jua', 'Gowun Dodum', sans-serif;
@@ -375,7 +385,7 @@
 <script>
 (function () {
   var cfg = window.PORTAL_CONFIG || {};
-  var ACCENTS = { olympos: '#4a3d8f', baeum: '#3f8a3a', braincube: '#1f74c9' };
+  var ACCENTS = { olympos: '#4a3d8f', baeum: '#3f8a3a', braincube: '#1f74c9', monsterbook: '#c8551f' };
   var FALLBACK = ['#e0663e', '#4f7be0', '#c9a12a', '#d14f8a'];
 
   function el(tag, cls, text) {
@@ -426,10 +436,12 @@
   // 게임 카드
   var list = document.getElementById('games');
   var games = (cfg.games || []).filter(function (g) { return g && g.visible !== false; });
+  list.setAttribute('data-count', games.length);
 
   games.forEach(function (g, i) {
     var ready = !!(g.url && String(g.url).trim());
     var card = el(ready ? 'a' : 'div', 'game' + (ready ? '' : ' soon'));
+    card.setAttribute('data-id', g.id || '');
     card.style.setProperty('--accent', g.accent || ACCENTS[g.id] || FALLBACK[i % FALLBACK.length]);
 
     if (ready) {
