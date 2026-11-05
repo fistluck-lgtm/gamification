@@ -62,6 +62,17 @@ window.PORTAL_CONFIG = {
       image: './assets/braincube.jpg',
       newTab: false,
       visible: true
+    },
+    {
+      id: 'monsterbook',
+      title: '몬스터북',
+      tagline: '몬스터 도감을 하나씩 채워 가며 배우는 캐주얼 판타지 RPG',
+      tags: ['도감 수집', '캐주얼 RPG', '협동 모험'],
+      url: './monsterbook/',
+      teacherUrl: '',
+      image: './assets/monsterbook.jpg',
+      newTab: false,
+      visible: true
     }
   ],
 
