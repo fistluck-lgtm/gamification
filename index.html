@@ -106,15 +106,23 @@
     max-width: 760px;
     margin: 0 auto;
   }
-  @media (min-width: 1000px) {
-    .games { grid-template-columns: repeat(3, 1fr); max-width: none; }
-  }
-  /* 게임이 4개일 때: 태블릿·작은 PC는 2×2, 넓은 PC는 한 줄에 4개 */
+  /* 태블릿·작은 PC: 한 줄에 2개 (남는 1개는 가운데) */
   @media (min-width: 700px) {
-    .games[data-count="4"] { grid-template-columns: repeat(2, 1fr); max-width: none; }
+    .games { grid-template-columns: repeat(4, 1fr); max-width: none; }
+    .games > .col { grid-column: span 2; }
+    .games > .col:nth-child(2n+1):last-child { grid-column: 2 / span 2; }
   }
+  /* 넓은 PC: 한 줄에 3개 (마지막 줄에 남는 카드는 가운데) */
+  @media (min-width: 1100px) {
+    .games:not([data-count="4"]) { grid-template-columns: repeat(6, 1fr); }
+    .games:not([data-count="4"]) > .col:nth-child(n) { grid-column: span 2; }
+    .games:not([data-count="4"]) > .col:nth-child(3n+1):nth-last-child(2) { grid-column: 2 / span 2; }
+    .games:not([data-count="4"]) > .col:nth-child(3n+1):last-child { grid-column: 3 / span 2; }
+  }
+  /* 게임이 4개일 때: 아주 넓은 화면은 한 줄에 4개 */
   @media (min-width: 1280px) {
     .games[data-count="4"] { grid-template-columns: repeat(4, 1fr); }
+    .games[data-count="4"] > .col { grid-column: auto; }
     .games[data-count="4"] .title { font-size: 25px; }
     .games[data-count="4"] .tagline { font-size: 15px; }
   }
@@ -385,7 +393,7 @@
 <script>
 (function () {
   var cfg = window.PORTAL_CONFIG || {};
-  var ACCENTS = { olympos: '#4a3d8f', baeum: '#3f8a3a', braincube: '#1f74c9', monsterbook: '#c8551f' };
+  var ACCENTS = { olympos: '#4a3d8f', baeum: '#3f8a3a', braincube: '#1f74c9', monsterbook: '#c8551f', novacity: '#0f7c8c' };
   var FALLBACK = ['#e0663e', '#4f7be0', '#c9a12a', '#d14f8a'];
 
   function el(tag, cls, text) {
