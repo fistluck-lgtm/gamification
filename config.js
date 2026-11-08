@@ -38,7 +38,7 @@ window.PORTAL_CONFIG = {
       url: 'https://script.google.com/macros/s/AKfycbzDiI-vIyRSRDpDzG8RFhjiDGjAgTML7OjTCEcbw6cj03aceaY7mRNYxW-bmWXMD_hy/exec',
       teacherUrl: 'https://script.google.com/macros/s/AKfycbzDiI-vIyRSRDpDzG8RFhjiDGjAgTML7OjTCEcbw6cj03aceaY7mRNYxW-bmWXMD_hy/exec?page=teacher',
       image: './assets/olympos.jpg',
-      newTab: false,
+      newTab: true,
       visible: true
     },
     {
@@ -49,7 +49,7 @@ window.PORTAL_CONFIG = {
       url: 'https://script.google.com/macros/s/AKfycby2ITApzdfhlqSS8t4q9SDDJK1hPstbJsY5nMO59FInNc7uRRXajeIdMxJFSmmRQ0lg/exec',
       teacherUrl: 'https://script.google.com/macros/s/AKfycby2ITApzdfhlqSS8t4q9SDDJK1hPstbJsY5nMO59FInNc7uRRXajeIdMxJFSmmRQ0lg/exec?page=teacher',
       image: './assets/baeum.jpg',
-      newTab: false,
+      newTab: true,
       visible: true
     },
     {
@@ -60,7 +60,7 @@ window.PORTAL_CONFIG = {
       url: 'https://script.google.com/macros/s/AKfycbx0ffmWPLRgs4Bwh5Kp2Yy4aKNKHbHuYIt-TQ3IedBRbLA_YcOZw4bJ62vwfWtm_pyr/exec',
       teacherUrl: 'https://script.google.com/macros/s/AKfycbx0ffmWPLRgs4Bwh5Kp2Yy4aKNKHbHuYIt-TQ3IedBRbLA_YcOZw4bJ62vwfWtm_pyr/exec?page=teacher',
       image: './assets/braincube.jpg',
-      newTab: false,
+      newTab: true,
       visible: true
     },
     {
@@ -71,7 +71,7 @@ window.PORTAL_CONFIG = {
       url: 'https://script.google.com/macros/s/AKfycby8Bvddk1H6efS3kY1DAmfG1t6sP2yWpuFJ3-0hn2C4dNtCwcHFLmj0-i-kZ5KkHJT4Jw/exec',
       teacherUrl: 'https://script.google.com/macros/s/AKfycby8Bvddk1H6efS3kY1DAmfG1t6sP2yWpuFJ3-0hn2C4dNtCwcHFLmj0-i-kZ5KkHJT4Jw/exec?page=teacher',
       image: './assets/monsterbook.jpg',
-      newTab: false,
+      newTab: true,
       visible: true
  },
     {
@@ -82,7 +82,7 @@ window.PORTAL_CONFIG = {
       url: 'https://script.google.com/macros/s/AKfycbwFkt9fTV3_a18mnGNLVom1aU8ljL94XBdqcDwAcaRrq9FfqySJYX5EG8EZY-HTg5lu/exec',
       teacherUrl: 'https://script.google.com/macros/s/AKfycbwFkt9fTV3_a18mnGNLVom1aU8ljL94XBdqcDwAcaRrq9FfqySJYX5EG8EZY-HTg5lu/exec?page=teacher',
       image: './assets/novacity.jpg',
-      newTab: false,
+      newTab: true,
       visible: true
     }
   ],
