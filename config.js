@@ -84,8 +84,8 @@ window.PORTAL_CONFIG = {
       image: './assets/novacity.jpg',
       newTab: true,
       visible: true
-    }
-         {
+    },
+     {
       id: 'tetraknights',
       title: '테트라 나이츠',
       tagline: '문제를 맞혀 스킬을 쓰며 블록을 쌓는 1~4인 테트리스 대전 게임',
