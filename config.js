@@ -85,6 +85,17 @@ window.PORTAL_CONFIG = {
       newTab: true,
       visible: true
     }
+         {
+      id: 'tetraknights',
+      title: '테트라 나이츠',
+      tagline: '문제를 맞혀 스킬을 쓰며 블록을 쌓는 1~4인 테트리스 대전 게임',
+      tags: ['테트리스', '2:2 팀 대전', '모둠 레이드'],
+      url: 'https://script.google.com/macros/s/AKfycbxcjOtGjwFEfJtKM7ImJ-PUQ27XGpn3TmRumiOnXCwsi0IYynkXlWT1mIGBr0hnqrA8/exec',
+      teacherUrl: 'https://script.google.com/macros/s/AKfycbxcjOtGjwFEfJtKM7ImJ-PUQ27XGpn3TmRumiOnXCwsi0IYynkXlWT1mIGBr0hnqrA8/exec?page=teacher',
+      image: './assets/tetraknights.jpg',
+      newTab: true,
+      visible: true
+    }
   ],
 
   /* 3. 하단 안내 ------------------------------------------- */
